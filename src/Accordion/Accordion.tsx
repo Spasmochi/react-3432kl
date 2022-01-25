@@ -1,4 +1,4 @@
-import { useMemo, ReactNode, FC } from 'react'
+import { useMemo, ReactNode, FC, useCallback } from 'react'
 import { useAccordion, AccordionContext } from './useAccordion'
 /*
  * Wraps the contents of the Accordion
@@ -15,37 +15,35 @@ export type AccordionProps = {
 
 // useAccordion
 
-export const Accordion: FC<AccordionProps> = ({ children, ...props }) => {
+export const Accordion: FC<AccordionProps> = ({ ...props }) => {
   const { ...context } = useAccordion(props)
 
   const ctx = useMemo(() => ({ ...context }), [context])
 
   return (
     <AccordionContext.Provider value={ctx}>
-      {children}
+      {props.children}
     </AccordionContext.Provider>
   )
 }
 
+const updateSelectState = useCallback(
+  (item: DropdownSelectedItem) => {
+    selected.current = item
+    setFocusedIndex(item.index)
+  },
+  [setFocusedIndex]
+)
 
-
- const updateSelectState = useCallback(
-   (item: DropdownSelectedItem) => {
-     selected.current = item
-     setFocusedIndex(item.index)
-   },
-   [setFocusedIndex]
- )
-
- /**
-  * <Accordion>
-  *   <AI>
-  *     <div>
-  *       <Toggle>
-  *         Hello
-  *       </Toggle>
-  *     </div>
-  *     <Collapse/>
-  *   </AI>
-  * </Accordion>
-  */
+/**
+ * <Accordion>
+ *   <AI>
+ *     <div>
+ *       <Toggle>
+ *         Hello
+ *       </Toggle>
+ *     </div>
+ *     <Collapse/>
+ *   </AI>
+ * </Accordion>
+ */
